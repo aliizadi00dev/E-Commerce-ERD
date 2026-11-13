@@ -1,0 +1,289 @@
+direction: down
+
+vars: {
+  d2-config: {
+    layout-engine: tala
+    theme-id: 200
+  }
+}
+
+project: {
+  label: Basalam Clone
+
+  mentoring: {
+    direction: down
+    author: Ali Izadi
+    author.shape: person
+    mentor: Erfan Saberi
+    mentor.shape: c4-person
+    mentor -> author
+  }
+
+  metadata: {
+    tech_stacks: {
+      label: Tech Stacks
+      shape: cloud
+    }
+
+    tech_1: PostgreSQL
+    tech_2: FastAPI
+    tech_3: SQL
+    tech_4: ERD
+
+    tech_stacks -> tech_1
+    tech_stacks -> tech_2
+    tech_stacks -> tech_3
+    tech_stacks -> tech_4
+
+    entities: {
+      style: {
+        3d: true
+      }
+
+      users
+      addresses
+      stores
+      categories
+      products
+      product_images
+      carts
+      cart_items
+      orders
+      store_orders
+      order_items
+      payments
+      wallets
+      wallet_transactions
+    }
+  }
+}
+
+project.database: SQL Schema {
+  shape: cylinder
+  style: {
+    font-size: 55
+    bold: true
+    stroke-width: 8
+  }
+
+  users: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    username: varchar {constraint: unique}
+    first_name: varchar
+    last_name: varchar
+    email: varchar {constraint: unique}
+    password_hash: varchar
+    created_at: timestamp
+  }
+
+  addresses: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    user_id: int {constraint: foreign_key}
+    street: varchar
+    city: varchar
+    country: varchar
+    postal_code: varchar
+    is_default: boolean
+  }
+
+  stores: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    owner_id: int {constraint: foreign_key}
+    name: varchar
+    slug: varchar {constraint: unique}
+    description: text
+    status: varchar
+    created_at: timestamp
+  }
+
+  categories: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    name: varchar
+    parent_id: int {constraint: foreign_key}
+  }
+
+  products: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    store_id: int {constraint: foreign_key}
+    category_id: int {constraint: foreign_key}
+    name: varchar
+    description: text
+    price: decimal
+    stock: int
+    status: varchar
+    created_at: timestamp
+  }
+
+  product_images: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    product_id: int {constraint: foreign_key}
+    image_url: varchar
+    alt_text: varchar
+    position: int
+  }
+
+  carts: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    user_id: int {constraint: foreign_key}
+    status: varchar
+    created_at: timestamp
+  }
+
+  cart_items: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    cart_id: int {constraint: foreign_key}
+    product_id: int {constraint: foreign_key}
+    quantity: int
+  }
+
+  orders: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    user_id: int {constraint: foreign_key}
+    address_id: int {constraint: foreign_key}
+    status: varchar
+    total_amount: decimal
+    created_at: timestamp
+  }
+
+  store_orders: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    order_id: int {constraint: foreign_key}
+    store_id: int {constraint: foreign_key}
+    status: varchar
+    subtotal: decimal
+    created_at: timestamp
+  }
+
+  order_items: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    store_order_id: int {constraint: foreign_key}
+    product_id: int {constraint: foreign_key}
+    product_name: varchar
+    quantity: int
+    unit_price: decimal
+  }
+
+  payments: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    order_id: int {constraint: foreign_key}
+    method: varchar
+    gateway: varchar
+    gateway_reference: varchar
+    status: varchar
+    amount: decimal
+    paid_at: timestamp
+    created_at: timestamp
+  }
+
+  wallets: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    user_id: int {constraint: foreign_key}
+    balance: decimal
+    updated_at: timestamp
+  }
+
+  wallet_transactions: {
+    shape: sql_table
+
+    id: int {constraint: primary_key}
+    wallet_id: int {constraint: foreign_key}
+    payment_id: int {constraint: foreign_key}
+    order_id: int {constraint: foreign_key}
+    type: varchar
+    amount: decimal
+    description: text
+    status: varchar
+    created_at: timestamp
+  }
+
+  # User relationships
+  users.id -> addresses.user_id: "1 : N"
+  users.id -> stores.owner_id: "1 : N"
+  users.id -> carts.user_id: "1 : N"
+  users.id -> orders.user_id: "1 : N"
+  users.id -> wallets.user_id: "1 : 1"
+
+  # Category relationships
+  categories.id -> products.category_id: "1 : N"
+  categories.id -> categories.parent_id: "Parent / Child"
+
+  # Store and product relationships
+  stores.id -> products.store_id: "1 : N"
+  products.id -> product_images.product_id: "1 : N"
+
+  # Cart relationships
+  carts.id -> cart_items.cart_id: "1 : N"
+  products.id -> cart_items.product_id: "1 : N"
+
+  # Order relationships
+  addresses.id -> orders.address_id: "1 : N"
+  orders.id -> store_orders.order_id: "1 : N"
+  stores.id -> store_orders.store_id: "1 : N"
+  store_orders.id -> order_items.store_order_id: "1 : N"
+  products.id -> order_items.product_id: "1 : N"
+
+  # Payment relationships
+  orders.id -> payments.order_id: "1 : N"
+
+  # Wallet relationships
+  wallets.id -> wallet_transactions.wallet_id: "1 : N"
+  payments.id -> wallet_transactions.payment_id: "1 : N"
+  orders.id -> wallet_transactions.order_id: "1 : N"
+}
+
+footnote: |md
+  ----
+  # Multi-Vendor E-Commerce Platform – Database Design
+
+  A relational database schema for a multi-vendor e-commerce platform where users can create and manage their own stores, publish products, browse different vendors, and purchase products.
+
+  ### Main Entities
+
+  - **Users:** Customer and store-owner account management.
+  - **Addresses:** User shipping and delivery addresses.
+  - **Stores:** Vendor stores and their information.
+  - **Categories:** Hierarchical product categorization.
+  - **Products:** Product details, pricing, inventory, and availability.
+  - **Product Images:** Multiple images associated with products.
+  - **Carts & Cart Items:** Shopping cart management.
+  - **Orders:** Customer purchases and order tracking.
+  - **Store Orders:** Separates orders by individual vendors.
+  - **Order Items:** Purchased products, quantities, and historical prices.
+  - **Payments:** Payment methods, gateway transactions, and payment statuses.
+  - **Wallets:** User wallet balances.
+  - **Wallet Transactions:** Wallet deposits, withdrawals, purchases, and refunds.
+
+  The design uses primary keys, foreign keys, and relational constraints to maintain data integrity and support scalable marketplace operations.
+
+  ----
+  ##### This is an expermintal project for mentoring
+  - 2026, November
+  - [https://github.com/aliizadi00dev/E-Commerce-ERD](https://github.com/aliizadi00dev/E-Commerce-ERD)
+  ----
+|
