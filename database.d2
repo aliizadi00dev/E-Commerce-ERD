@@ -225,7 +225,7 @@ project.database: SQL Schema {
   # User relationships
   users.id -> addresses.user_id: "1 : N"
   users.id -> stores.owner_id: "1 : N"
-  users.id -> carts.user_id: "1 : N"
+  users.id -> carts.user_id: "1 : N" # If we don't keep cart history we should use "1 : 1" relationship
   users.id -> orders.user_id: "1 : N"
   users.id -> wallets.user_id: "1 : 1"
 
