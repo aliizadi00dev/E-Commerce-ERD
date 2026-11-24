@@ -1,0 +1,33 @@
+# User relationships
+users.id -> addresses.user_id: "1 : N"
+users.id -> stores.owner_id: "1 : N"
+users.id -> carts.user_id: "1 : N" # If we don't keep cart history we should use "1 : 1" relationship
+users.id -> orders.user_id: "1 : N"
+users.id -> wallets.user_id: "1 : 1"
+
+# Category relationships
+categories.id -> products.category_id: "1 : N"
+categories.id -> categories.parent_id: "Parent / Child"
+
+# Store and product relationships
+stores.id -> products.store_id: "1 : N"
+products.id -> product_images.product_id: "1 : N"
+
+# Cart relationships
+carts.id -> cart_items.cart_id: "1 : N"
+products.id -> cart_items.product_id: "1 : N"
+
+# Order relationships
+addresses.id -> orders.address_id: "1 : N"
+orders.id -> store_orders.order_id: "1 : N"
+stores.id -> store_orders.store_id: "1 : N"
+store_orders.id -> order_items.store_order_id: "1 : N"
+products.id -> order_items.product_id: "1 : N"
+
+# Payment relationships
+orders.id -> payments.order_id: "1 : N"
+
+# Wallet relationships
+wallets.id -> wallet_transactions.wallet_id: "1 : N"
+payments.id -> wallet_transactions.payment_id: "1 : N"
+orders.id -> wallet_transactions.order_id: "1 : N"

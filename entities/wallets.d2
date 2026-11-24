@@ -1,0 +1,22 @@
+wallets: {
+  shape: sql_table
+
+  id: int {constraint: primary_key}
+  user_id: int {constraint: foreign_key}
+  balance: decimal
+  updated_at: timestamp
+}
+
+wallet_transactions: {
+  shape: sql_table
+
+  id: int {constraint: primary_key}
+  wallet_id: int {constraint: foreign_key}
+  payment_id: int {constraint: foreign_key}
+  order_id: int {constraint: foreign_key}
+  type: varchar
+  amount: decimal
+  description: text
+  status: varchar
+  created_at: timestamp
+}

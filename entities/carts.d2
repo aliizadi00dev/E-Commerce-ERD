@@ -1,0 +1,17 @@
+carts: {
+  shape: sql_table
+
+  id: int {constraint: primary_key}
+  user_id: int {constraint: foreign_key}
+  status: varchar
+  created_at: timestamp
+}
+
+cart_items: {
+  shape: sql_table
+
+  id: int {constraint: primary_key}
+  cart_id: int {constraint: foreign_key}
+  product_id: int {constraint: foreign_key}
+  quantity: int
+}

@@ -1,0 +1,13 @@
+payments: {
+  shape: sql_table
+
+  id: int {constraint: primary_key}
+  order_id: int {constraint: foreign_key}
+  method: varchar
+  gateway: varchar
+  gateway_reference: varchar
+  status: varchar
+  amount: decimal
+  paid_at: timestamp
+  created_at: timestamp
+}

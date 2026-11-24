@@ -1,0 +1,23 @@
+users: {
+  shape: sql_table
+
+  id: int {constraint: primary_key}
+  username: varchar {constraint: unique}
+  first_name: varchar
+  last_name: varchar
+  email: varchar {constraint: unique}
+  password_hash: varchar
+  created_at: timestamp
+}
+
+addresses: {
+  shape: sql_table
+
+  id: int {constraint: primary_key}
+  user_id: int {constraint: foreign_key}
+  street: varchar
+  city: varchar
+  country: varchar
+  postal_code: varchar
+  is_default: boolean
+}

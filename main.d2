@@ -1,0 +1,73 @@
+...@styles
+
+project: {
+  label: Basalam Clone
+
+  mentoring: {
+    direction: down
+    author: Ali Izadi
+    author.shape: person
+    mentor: Erfan Saberi
+    mentor.shape: c4-person
+    mentor -> author
+  }
+
+  metadata: {
+    tech_stacks: {
+      label: Tech Stacks
+      shape: cloud
+    }
+
+    tech_1: PostgreSQL
+    tech_2: FastAPI
+    tech_3: SQL
+    tech_4: ERD
+
+    tech_stacks -> tech_1
+    tech_stacks -> tech_2
+    tech_stacks -> tech_3
+    tech_stacks -> tech_4
+
+    entities: {
+      style: {
+        3d: true
+      }
+
+      users
+      addresses
+      stores
+      categories
+      products
+      product_images
+      carts
+      cart_items
+      orders
+      store_orders
+      order_items
+      payments
+      wallets
+      wallet_transactions
+    }
+  }
+}
+
+project.database: SQL Schema {
+  shape: cylinder
+  style: {
+    font-size: 55
+    bold: true
+    stroke-width: 8
+  }
+
+  ...@entities/users
+  ...@entities/products
+  ...@entities/stores
+  ...@entities/carts
+  ...@entities/wallets
+  ...@entities/categories
+  ...@entities/payments
+  ...@entities/orders
+  ...@relationships
+}
+
+footnote: @footnote
