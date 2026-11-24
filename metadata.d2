@@ -1,0 +1,92 @@
+direction: down
+
+vars: {
+  d2-config: {
+    layout-engine: tala
+    theme-id: 200
+  }
+}
+
+project: {
+  label: Basalam Clone
+
+  mentoring: {
+    direction: down
+    author: Ali Izadi
+    author.shape: person
+    mentor: Erfan Saberi
+    mentor.shape: c4-person
+    mentor -> author
+  }
+
+  metadata: {
+    tech_stacks: {
+      label: Tech Stacks
+      shape: cloud
+    }
+
+    tech_1: PostgreSQL
+    tech_2: FastAPI
+    tech_3: SQL
+    tech_4: ERD
+
+    tech_stacks -> tech_1
+    tech_stacks -> tech_2
+    tech_stacks -> tech_3
+    tech_stacks -> tech_4
+
+    entities: {
+      style: {
+        3d: true
+      }
+
+      users
+      addresses
+      stores
+      categories
+      products
+      product_images
+      carts
+      cart_items
+      orders
+      store_orders
+      order_items
+      payments
+      wallets
+      wallet_transactions
+    }
+  }
+}
+
+
+
+footnote: |md
+  ----
+  # Multi-Vendor E-Commerce Platform – Database Design
+
+  A relational database schema for a multi-vendor e-commerce platform where users can create and manage their own stores, publish products, browse different vendors, and purchase products.
+
+  ### Main Entities
+
+  - **Users:** Customer and store-owner account management.
+  - **Addresses:** User shipping and delivery addresses.
+  - **Stores:** Vendor stores and their information.
+  - **Categories:** Hierarchical product categorization.
+  - **Products:** Product details, pricing, inventory, and availability.
+  - **Product Images:** Multiple images associated with products.
+  - **Carts & Cart Items:** Shopping cart management.
+  - **Orders:** Customer purchases and order tracking.
+  - **Store Orders:** Separates orders by individual vendors.
+  - **Order Items:** Purchased products, quantities, and historical prices.
+  - **Payments:** Payment methods, gateway transactions, and payment statuses.
+  - **Wallets:** User wallet balances.
+  - **Wallet Transactions:** Wallet deposits, withdrawals, purchases, and refunds.
+
+  The design uses primary keys, foreign keys, and relational constraints to maintain data integrity and support scalable marketplace operations.
+
+  ----
+  ##### This is an expermintal project for mentoring
+  - 2026, November
+  - [https://github.com/aliizadi00dev/E-Commerce-ERD](https://github.com/aliizadi00dev/E-Commerce-ERD)
+  ----
+|
