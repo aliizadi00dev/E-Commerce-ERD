@@ -20,6 +20,14 @@ footnote: |md
   - **Wallets:** User wallet balances.
   - **Wallet Transactions:** Wallet deposits, withdrawals, purchases, and refunds.
 
+  ### Application-Level Authentication
+
+  - Passwords live in `users.password_hash` as salted bcrypt hashes of `SHA-256(password)`.
+  - Legacy SHA-256 hashes are accepted and transparently upgraded on login.
+  - Login issues stateless JWT access tokens; sessions and tokens are not persisted.
+  - Admin privileges come from the `ADMIN_EMAILS` environment variable, not a database column.
+  - Phase 1 auth introduced no new tables or columns.
+
   The design uses primary keys, foreign keys, and relational constraints to maintain data integrity and support scalable marketplace operations.
 
   ----

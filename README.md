@@ -51,6 +51,18 @@ details
 purchases, and refunds
 -----------------------------------------------------------------------
 
+## Application-Level Authentication
+
+Phase 1 authentication is implemented without changing the database schema:
+
+- Passwords are stored in `users.password_hash` as salted bcrypt hashes of `SHA-256(password)`.
+- Legacy SHA-256 hashes from earlier demo data are accepted and upgraded on the next successful login.
+- Login issues stateless JWT access tokens; no session or token table is persisted.
+- Admin privileges are resolved from the `ADMIN_EMAILS` environment variable, not from a database column.
+- Ownership checks use existing foreign keys such as `stores.owner_id`, `carts.user_id`, `orders.user_id`, and `wallets.user_id`.
+
+No new tables or columns were added for auth.
+
 ## Requirements
 
 - Linux, macOS, or Windows
