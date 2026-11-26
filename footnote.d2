@@ -26,7 +26,22 @@ footnote: |md
   - Legacy SHA-256 hashes are accepted and transparently upgraded on login.
   - Login issues stateless JWT access tokens; sessions and tokens are not persisted.
   - Admin privileges come from the `ADMIN_EMAILS` environment variable, not a database column.
-  - Phase 1 auth introduced no new tables or columns.
+  - Auth introduced no new tables or columns.
+
+  ### Integrity Constraints (Phase 2)
+
+  - Non-negative: `products.price`, `products.stock`, `product_images.position`,
+    `orders.total_amount`, `store_orders.subtotal`, `order_items.unit_price`,
+    `wallets.balance`.
+  - Positive: `cart_items.quantity`, `order_items.quantity`, `payments.amount`,
+    `wallet_transactions.amount`.
+  - Status values are constrained for stores, products, carts, orders, store orders,
+    payments, and wallet transactions.
+  - Payment methods are limited to `wallet`, `gateway`, `card`.
+  - Wallet transaction types are limited to `credit`, `debit`.
+  - Unique: one wallet per user, unique cart items per product, one store portion
+    per order.
+  - Schema changes are managed by Alembic; tables are no longer created at startup.
 
   The design uses primary keys, foreign keys, and relational constraints to maintain data integrity and support scalable marketplace operations.
 

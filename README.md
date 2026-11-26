@@ -53,15 +53,27 @@ purchases, and refunds
 
 ## Application-Level Authentication
 
-Phase 1 authentication is implemented without changing the database schema:
+Authentication is implemented without changing the database schema:
 
 - Passwords are stored in `users.password_hash` as salted bcrypt hashes of `SHA-256(password)`.
-- Legacy SHA-256 hashes from earlier demo data are accepted and upgraded on the next successful login.
+- Legacy SHA-256 hashes are accepted and upgraded on the next successful login.
 - Login issues stateless JWT access tokens; no session or token table is persisted.
 - Admin privileges are resolved from the `ADMIN_EMAILS` environment variable, not from a database column.
 - Ownership checks use existing foreign keys such as `stores.owner_id`, `carts.user_id`, `orders.user_id`, and `wallets.user_id`.
 
 No new tables or columns were added for auth.
+
+## Integrity Constraints
+
+Phase 2 added database-level checks and Alembic migrations:
+
+- Non-negative: `products.price`, `products.stock`, `product_images.position`, `orders.total_amount`, `store_orders.subtotal`, `order_items.unit_price`, `wallets.balance`.
+- Positive: `cart_items.quantity`, `order_items.quantity`, `payments.amount`, `wallet_transactions.amount`.
+- Allowed status values are enforced for stores, products, carts, orders, store orders, payments, and wallet transactions.
+- Payment methods: `wallet`, `gateway`, `card`.
+- Wallet transaction types: `credit`, `debit`.
+- Unique constraints: one wallet per user, unique cart items per product, one store portion per order.
+- Schema is managed by Alembic; the application no longer calls `create_all` at startup.
 
 ## Requirements
 
